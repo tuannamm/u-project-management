@@ -1,0 +1,133 @@
+/* DIGI-TEXX design tokens.
+   Source of truth for brand values: DIGI-TEXX Branding Guidelines 2024 (PDF).
+     rule    = stated in the PDF
+     sampled = shown in PDF artwork, pixel-sampled (PDF p.11 mislabels these swatches)
+     kit     = Frontend Kit decision, not a brand rule
+   Theming: light on :root. Dark via OS setting, or data-theme="dark" on any element
+   (scopes nest: a data-theme="dark" band inside a light page flips only that band). */
+
+:root {
+  /* ---- brand constants (theme-independent) ---- */
+  --dtx-blue: #2582D7;        /* rule: DIGI-TEXX Blue, leads every design */
+  --dtx-lime: #A5CB1F;        /* rule: accent, always next to blue */
+  --dtx-amber: #F6B71E;       /* rule */
+  --dtx-violet: #9127D6;      /* rule */
+  --dtx-ink: #231F20;         /* rule: logo wordmark */
+  --dtx-gray: #6E6F72;        /* rule: logo tagline */
+  --dtx-navy: #26385D;        /* sampled */
+  --dtx-ocean: #137BB6;       /* sampled */
+  --dtx-sky: #30AAE0;         /* sampled */
+  --dtx-light: #7BD2F2;       /* sampled */
+  --dtx-ice: #A8E5F5;         /* sampled */
+  --dtx-canvas-dark: #1E1D23; /* sampled: PDF page header */
+  --dtx-panel: #F0F0F0;       /* sampled: PDF page body */
+  --dtx-blue-strong: #1A6FBF; /* kit: fill behind small white text (5.16:1) */
+  --dtx-red: #C42B2B;         /* kit: solid danger fill (white text 5.63:1) */
+  --dtx-blue-hover: #155C9F;  /* kit: primary button hover */
+  --dtx-red-hover: #A82424;   /* kit: danger button hover */
+  --dtx-gradient-bar: linear-gradient(90deg, #00ACEB, #004EBE); /* sampled, decoration only */
+
+  /* ---- type ---- */
+  --dtx-font: "Roboto Variable", "Roboto", Arial, "Helvetica Neue", sans-serif;
+  --dtx-text-xs: .75rem;
+  --dtx-text-sm: .875rem;
+  --dtx-text-base: 1rem;
+  --dtx-text-lg: 1.25rem;
+  --dtx-text-xl: 1.5rem;
+  --dtx-text-h2: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+  --dtx-text-display: clamp(2.25rem, 1.4rem + 3.4vw, 4.25rem);
+
+  /* ---- shape ---- */
+  --dtx-radius-sm: 4px;
+  --dtx-radius-md: 6px;
+  --dtx-radius-lg: 10px;
+
+  /* ---- motion: durations (Fluent/Carbon range), easings (Material 3) ---- */
+  --dtx-dur-instant: 70ms;
+  --dtx-dur-fast: 120ms;
+  --dtx-dur-base: 200ms;
+  --dtx-dur-slow: 320ms;
+  --dtx-dur-page: 480ms;
+  --dtx-ease-standard: cubic-bezier(.2, 0, 0, 1);
+  --dtx-ease-enter: cubic-bezier(0, 0, 0, 1);
+  --dtx-ease-exit: cubic-bezier(.3, 0, 1, 1);
+  --dtx-ease-emphasis: cubic-bezier(.05, .7, .1, 1);
+}
+
+/* ---- semantic: light ---- */
+:root, [data-theme="light"] {
+  --dtx-bg: #F0F0F0;
+  --dtx-surface: #FFFFFF;
+  --dtx-surface-2: #F6F7F9;
+  --dtx-border: rgb(38 56 93 / .13);
+  --dtx-border-strong: rgb(38 56 93 / .24);
+  --dtx-hover: rgb(38 56 93 / .06);
+  --dtx-fg: #1B1A1F;
+  --dtx-fg-muted: #55575C;
+  --dtx-link: #126FA6;      /* kit: ocean #137BB6 is only 4.06:1 on the #F0F0F0 page; darkened to pass AA */
+  --dtx-primary: #2582D7;
+  --dtx-primary-strong: #1A6FBF;
+  --dtx-on-primary: #FFFFFF;
+  --dtx-focus: #2582D7;
+  --dtx-nav-active: #135E9F;
+  --dtx-shadow-pop: 0 12px 32px rgb(38 56 93 / .16);
+  --dtx-tone-brand: #135E9F;
+  --dtx-tone-ok: #3F5208;
+  --dtx-tone-warn: #6B4A00;
+  --dtx-tone-err: #A12424;
+  --dtx-tone-neutral: #47494E;
+  --dtx-tone-violet: #6A1DA0;
+  --dtx-shimmer: rgb(255 255 255 / .6);
+  --dtx-accent-gradient: linear-gradient(90deg, #1A6FBF, #2582D7); /* display accent text, ≥ 4:1 on light */
+  color-scheme: light;
+}
+
+/* ---- semantic: dark (same values in both blocks) ---- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --dtx-bg: #1E1D23;
+    --dtx-surface: #26252C;
+    --dtx-surface-2: #2E2D36;
+    --dtx-border: rgb(255 255 255 / .09);
+    --dtx-border-strong: rgb(255 255 255 / .17);
+    --dtx-hover: rgb(255 255 255 / .06);
+    --dtx-fg: #F4F5F7;
+    --dtx-fg-muted: #B8BAC0;
+    --dtx-link: #30AAE0;
+    --dtx-focus: #30AAE0;
+    --dtx-nav-active: #7BD2F2;
+    --dtx-shadow-pop: 0 12px 40px rgb(0 0 0 / .45);
+    --dtx-tone-brand: #7BD2F2;
+    --dtx-tone-ok: #C4E35A;
+    --dtx-tone-warn: #F8CB5C;
+    --dtx-tone-err: #FF9A9A;
+    --dtx-tone-neutral: #C9CBD1;
+    --dtx-tone-violet: #D9B3F5;
+    --dtx-shimmer: rgb(255 255 255 / .1);
+    --dtx-accent-gradient: linear-gradient(90deg, #30AAE0, #7BD2F2);
+    color-scheme: dark;
+  }
+}
+[data-theme="dark"] {
+  --dtx-bg: #1E1D23;
+  --dtx-surface: #26252C;
+  --dtx-surface-2: #2E2D36;
+  --dtx-border: rgb(255 255 255 / .09);
+  --dtx-border-strong: rgb(255 255 255 / .17);
+  --dtx-hover: rgb(255 255 255 / .06);
+  --dtx-fg: #F4F5F7;
+  --dtx-fg-muted: #B8BAC0;
+  --dtx-link: #30AAE0;
+  --dtx-focus: #30AAE0;
+  --dtx-nav-active: #7BD2F2;
+  --dtx-shadow-pop: 0 12px 40px rgb(0 0 0 / .45);
+  --dtx-tone-brand: #7BD2F2;
+  --dtx-tone-ok: #C4E35A;
+  --dtx-tone-warn: #F8CB5C;
+  --dtx-tone-err: #FF9A9A;
+  --dtx-tone-neutral: #C9CBD1;
+  --dtx-tone-violet: #D9B3F5;
+  --dtx-shimmer: rgb(255 255 255 / .1);
+  --dtx-accent-gradient: linear-gradient(90deg, #30AAE0, #7BD2F2);
+  color-scheme: dark;
+}

@@ -1,70 +1,31 @@
-# Getting Started with Create React App
+# u-project-management
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+UI React + TypeScript (Create React App) cho hệ thống Project Management.
 
-## Available Scripts
+## Chạy local
 
-In the project directory, you can run:
+1. Chạy Keycloak, import `apps/w-identity/fixtures/pm-realm.json` (xem README của w-identity) và tạo một tài khoản thử trong realm `pm`.
+2. Chạy API Gateway với `GATEWAY_CORS_ORIGINS=http://localhost:3001` (xem `apps/api-gateway/.env.identity.example`).
+3. Từ thư mục này: `npm start` → http://localhost:3001 (cấu hình ở `.env.development`).
 
-### `npm start`
+## Đăng nhập và đăng xuất
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Authorization Code + PKCE (`keycloak-js`), client `pm-web`. SPA **không** nhận mật khẩu: trang đăng nhập do Keycloak phục vụ.
+- Ứng dụng **bắt buộc đăng nhập**: chưa có phiên thì chuyển thẳng sang trang đăng nhập của Keycloak (`onLoad: 'login-required'`), không cần bấm nút. Đăng xuất xong quay về `/` và lại sang trang đăng nhập.
+- Token chỉ nằm trong bộ nhớ; F5 hỏi lại Keycloak, phiên SSO còn thì không phải nhập lại mật khẩu.
+- Đăng xuất xóa token ở UI và chuyển hướng tới `/logout` của Keycloak để hủy phiên SSO. Access token đã cấp vẫn hợp lệ đến khi hết hạn.
+- `apiClient` gắn `Authorization: Bearer`; 401 → làm mới và thử lại một lần, vẫn lỗi thì sang trang đăng nhập; 403 → tải lại `/me/permissions`; 503 → báo lỗi tạm thời.
+- Permission chỉ dùng để ẩn/hiện giao diện. Việc chặn thật ở gateway và service.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Kế hoạch và quyết định: `apps/w-identity/documents/PLAN-AUTH-UI.md`; học và ôn: sổ tay `#authz` trong Knowledge Base.
 
-### `npm test`
+## Lệnh
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- `npm run typecheck` — kiểm tra kiểu (`tsc --noEmit`).
+- `npm test` — chạy test (auth giả, không cần Keycloak).
+- `npm run build` — build production.
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Ghi chú về công cụ:
+- React Router dùng v6 vì Jest của Create React App 5 không nạp được v7.
+- TypeScript ghim `4.9.5` (react-scripts 5 chỉ hỗ trợ đến 4.x) và `@types/node@20`, `@types/jest@29` để tương thích với bản này.
+- `src/keycloak-js.d.ts` trỏ kiểu của `keycloak-js` vì gói chỉ khai báo kiểu qua `exports`, còn Create React App ép `moduleResolution: node`.
